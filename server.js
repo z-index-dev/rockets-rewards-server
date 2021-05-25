@@ -53,4 +53,4 @@ app.get('/', (req, res) => {
   });
 
   return console.log('Ready to process...');
-});
+}).listen(process.env.PORT || 3000);
