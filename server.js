@@ -53,6 +53,4 @@ app.get('/', (req, res) => {
   });
 
   return console.log('Ready to process...');
-}).listen(3000);
-
-console.log('listening on port 3000');
+});
