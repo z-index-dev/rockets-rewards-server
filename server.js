@@ -44,13 +44,9 @@ app.post('/', (req, res) => {
   });
 
   // return res.redirect('http://localhost:1234/');
+  console.log(req.body);
+  res.sendStatus(200);
   return res.send({message:"thank you for signing up"});
 });
 
-app.get('/', (req, res) => {
-  res.set({
-    'Allow-access-Allow-origin': '*'
-  });
-
-  return console.log('Ready to process...');
-}).listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000);
