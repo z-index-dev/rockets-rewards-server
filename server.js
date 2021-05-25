@@ -23,7 +23,7 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error in connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-app.post('/', (req, res) => {
+app.post('*', (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
   const phno = req.body.phno;
