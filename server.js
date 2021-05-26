@@ -49,7 +49,10 @@ app.post('/submit', (req, res) => {
 
 app.get('/', (req, res) => {
   res.set({
-    'Allow-access-Allow-origin': '*'
+    'Allow-access-Allow-origin': '*',
+    'Access-Control-Allow-Credentials': true,
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json'
   });
 
   return console.log('Ready to process...');
