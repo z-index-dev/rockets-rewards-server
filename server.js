@@ -23,7 +23,7 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error in connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-app.post('*', (req, res) => {
+app.post('/submit', (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
   const phno = req.body.phno;
@@ -43,10 +43,15 @@ app.post('*', (req, res) => {
     console.log('Record inserted');
   });
 
-  // return res.redirect('http://localhost:1234/');
-  console.log(req.body);
-  res.sendStatus(200);
-  return res.send({message:"thank you for signing up"});
+  return res.redirect('http://localhost:1234/');
 });
 
-app.listen(process.env.PORT || 3000);
+let port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.set({
+    'Allow-access-Allow-origin': '*'
+  });
+
+  return console.log('Ready to process...');
+}).listen(port);
