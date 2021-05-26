@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
 const app = express();
+const port = process.env.PORT || 3000; 
 
 app.use(bodyParser.json());
 
@@ -46,8 +46,6 @@ app.post('/submit', (req, res) => {
   // return res.redirect('http://localhost:1234/');
   return console.log(res.body);
 });
-
-let port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
   res.set({
