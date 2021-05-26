@@ -47,4 +47,10 @@ app.post('/submit', (req, res) => {
   return console.log(res.body);
 });
 
-app.listen(port);
+app.get('/', (req, res) => {
+  res.set({
+    'Allow-access-Allow-origin': '*'
+  });
+
+  return console.log('Ready to process...');
+}).listen(port);
