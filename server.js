@@ -38,7 +38,7 @@ app.post('/submit', (req, res) => {
     password
   };
 
-  db.collection('users').insertOne(data, (err, collection) => {
+  db.collection('requests').insertOne(data, (err, collection) => {
     if(err) {
       throw err;
     }
