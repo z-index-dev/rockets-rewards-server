@@ -55,7 +55,7 @@ app.post('/submit', (req, res) => {
   return res.json({"status":"ok"});
 });
 
-app.get('/', (req, res) => {
+app.get('/submit', (req, res) => {
   res.set({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': true,
