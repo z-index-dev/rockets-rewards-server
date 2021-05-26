@@ -50,7 +50,9 @@ app.post('/submit', (req, res) => {
   res.setHeader( 'Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.setHeader( 'Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
 
-  return console.log(res.body);
+  console.log(res.body);
+
+  return res.json({"status":"ok"});
 });
 
 app.get('/', (req, res) => {
@@ -61,5 +63,7 @@ app.get('/', (req, res) => {
     'Access-Control-Allow-Headers': 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json'
   });
 
-  return console.log('Ready to process...');
+  console.log('Ready to process...');
+
+  return res.json({"status":"ok"});
 }).listen(port);
