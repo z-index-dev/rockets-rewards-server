@@ -67,5 +67,5 @@ app.get('/submit', (req, res) => {
 
   console.log('Ready to process...');
 
-  return res.json({"status":"ok"});
+  return res.json({"status":"allowing access"});
 }).listen(port);
