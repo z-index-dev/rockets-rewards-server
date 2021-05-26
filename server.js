@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 3000; 
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // This means use the files in the public directory
 // app.use(express.static('/'));
@@ -45,10 +47,10 @@ app.post('/submit', (req, res) => {
 
   // return res.redirect('http://localhost:1234/');
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader( 'Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.setHeader( 'Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Credentials', true);
+  // res.setHeader( 'Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // res.setHeader( 'Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
 
   console.log(res.body);
 
