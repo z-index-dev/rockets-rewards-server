@@ -43,7 +43,8 @@ app.post('/submit', (req, res) => {
     console.log('Record inserted');
   });
 
-  return res.redirect('http://localhost:1234/');
+  // return res.redirect('http://localhost:1234/');
+  return console.log(res.body);
 });
 
 let port = process.env.PORT || 3000;
