@@ -71,7 +71,7 @@ app.get('/submit', (req, res) => {
 });
 
 app.get('/api', (req, res) => {
-  res.send('API is listening');
+  res.json({"status": "API is listening"});
 });
 
 app.listen(port);
