@@ -69,3 +69,7 @@ app.get('/submit', (req, res) => {
 
   return res.json({"status":"allowing access"});
 }).listen(port);
+
+app.get('/api', (req, res) => {
+  res.send('API is listening');
+}).listen(port);
