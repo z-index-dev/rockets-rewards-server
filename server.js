@@ -19,6 +19,7 @@ mongoose.connect('mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/r
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;
 
@@ -70,7 +71,7 @@ app.get('/submit', (req, res) => {
   return res.json({"status":"allowing access"});
 });
 
-app.get('/api', (req, res) => {
+app.get('/api/:id', (req, res) => {
   res.json({"status": "API is listening"});
 });
 
