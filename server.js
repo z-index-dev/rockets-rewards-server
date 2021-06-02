@@ -2,11 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const User = mongoose.model('User');
 const app = express();
 const port = process.env.PORT || 3000;
-
-// Schema variables
-const User = require('../models/User');
 
 app.use(bodyParser.json());
 app.use(cors());
