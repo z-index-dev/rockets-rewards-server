@@ -73,8 +73,8 @@ app.get('/submit', (req, res) => {
 });
 
 // NB - Mongo will export file with the id
-app.get('/api/:id', (req, res) => {
-  const user = User.findOne({ _id: req.params.id });
+app.get('/api/:id', async (req, res) => {
+  const user = await User.findOne({ _id: req.params.id });
   res.send({ user });
 });
 
