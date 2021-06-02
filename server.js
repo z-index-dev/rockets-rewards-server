@@ -6,7 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Schema variables
-const User = require('../models/user');
+const User = require('/models/user');
 
 app.use(bodyParser.json());
 app.use(cors());
