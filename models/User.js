@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // Create user schema and model
-const UserSchema = new Schema({
+const userSchema = new Schema({
   company: {
     type: String
   },
@@ -62,6 +62,6 @@ const UserSchema = new Schema({
   }
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
