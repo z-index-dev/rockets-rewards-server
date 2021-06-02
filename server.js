@@ -3,13 +3,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3000;
+
+// Schema variables
+const User = require('../models/user');
 
 app.use(bodyParser.json());
 app.use(cors());
 
-// This means use the files in the public directory
-// app.use(express.static('/'));
 app.use(bodyParser.urlencoded({
   encoded: true,
   extended: true
@@ -71,8 +72,10 @@ app.get('/submit', (req, res) => {
   return res.json({"status":"allowing access"});
 });
 
+// NB - Mongo will export file with the id
 app.get('/api/:id', (req, res) => {
-  res.json({"status": "API is listening"});
+  const user = User.findOne({ _id: req.params.id });
+  res.json({ user });
 });
 
 app.listen(port);
