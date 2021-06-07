@@ -24,54 +24,54 @@ const requestSchema = new Schema({
   totalPoints: {
     type: Number
   },
-  'product-01': {
+  product_01: {
     type: Number
   },
-  'product-02': {
+  product_02: {
     type: Number
   },
-  'product-03': {
+  product_03: {
     type: Number
   },
-  'product-04': {
+  product_04: {
     type: Number
   },
-  'product-05': {
+  product_05: {
     type: Number
   },
-  'product-06': {
+  product_06: {
     type: Number
   },
-  'product-07': {
+  product_07: {
     type: Number
   },
-  'product-08': {
+  product_08: {
     type: Number
   },
-  'product-09': {
+  product_09: {
     type: Number
   },
-  'product-10': {
+  product_10: {
     type: Number
   },
-  'product-11': {
+  product_11: {
     type: Number
   },
-  'product-12': {
+  product_12: {
     type: Number
   },
-  'product-13': {
+  product_13: {
     type: Number
   },
-  'product-14': {
+  product_14: {
     type: Number
   },
-  'product-15': {
+  product_15: {
     type: Number
   },
-  'product-16': {
+  product_16: {
     type: Number
-  }
+  },
 });
 
 const Request = mongoose.model('Request', requestSchema);
