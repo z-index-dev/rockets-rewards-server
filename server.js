@@ -32,14 +32,12 @@ app.post('/submit', (req, res) => {
   const data = new Request(req.body);
   console.log(req.body);
 
-  db.collection('requests').insertOne(data, (err, collection) => {
+  db.collection('requests').save(data, (err, collection) => {
     if(err) {
       throw err;
     }
     console.log('Record inserted');
   });
-
-  // return res.redirect('http://localhost:1234/');
 
   console.log(res.body);
 
