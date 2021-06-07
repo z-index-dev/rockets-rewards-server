@@ -9,13 +9,10 @@ const port = process.env.PORT || 3000;
 const User = require('./models/User');
 const Submission = require('./models/Submission');
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 
-app.use(bodyParser.urlencoded({
-  encoded: true,
-  extended: true
-}));
+app.use(express.urlencoded({extended: true}));
 
 mongoose.connect('mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority', {
   useNewUrlParser: true,
