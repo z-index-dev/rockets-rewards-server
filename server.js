@@ -7,6 +7,7 @@ const port = process.env.PORT || 3000;
 
 // Schema variables
 const User = require('./models/User');
+const Request = require('./models/Request');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -28,17 +29,7 @@ db.on('error', () => console.log('Error in connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
 app.post('/submit', (req, res) => {
-  const name = req.body.name;
-  const email = req.body.email;
-  const phno = req.body.phno;
-  const password = req.body.password;
-
-  const data = {
-    name,
-    email,
-    phno,
-    password
-  };
+  const data = new Request(req.body.content);
 
   db.collection('requests').insertOne(data, (err, collection) => {
     if(err) {

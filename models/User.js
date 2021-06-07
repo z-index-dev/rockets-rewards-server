@@ -24,7 +24,7 @@ const userSchema = new Schema({
   zip: {
     type: String
   },
-  accountNumer: {
+  accountNumber: {
     type: String
   },
   priorityNumber: {
