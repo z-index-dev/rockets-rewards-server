@@ -7,7 +7,6 @@ const port = process.env.PORT || 3000;
 
 // Schema variables
 const User = require('./models/User');
-const Request = require('./models/Submission');
 const Submission = require('./models/Submission');
 
 app.use(bodyParser.json());
