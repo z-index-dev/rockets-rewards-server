@@ -29,7 +29,7 @@ db.on('error', () => console.log('Error in connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
 app.post('/submit', (req, res) => {
-  const data = new Request(req.body.content);
+  const data = new Request(req.body);
 
   db.collection('requests').insertOne(data, (err, collection) => {
     if(err) {
