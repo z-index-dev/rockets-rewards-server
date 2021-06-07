@@ -32,7 +32,7 @@ app.post('/submit', (req, res) => {
   const data = new Request(req.body);
   console.log(req.body);
 
-  db.collection('requests').save(data, (err, collection) => {
+  db.collection('requests').insertOne(data, (err, collection) => {
     if(err) {
       throw err;
     }

@@ -71,7 +71,7 @@ const requestSchema = new Schema({
   },
   product_16: {
     type: Number
-  },
+  }
 });
 
 const Request = mongoose.model('Request', requestSchema);
