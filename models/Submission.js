@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // Create user schema and model
-const requestSchema = new Schema({
+const submissionSchema = new Schema({
   accountNumber: {
     type: String
   },
@@ -74,6 +74,6 @@ const requestSchema = new Schema({
   }
 });
 
-const Request = mongoose.model('Request', requestSchema);
+const Submission = mongoose.model('Submission', requestSchema);
 
-module.exports = Request;
+module.exports = Submission;

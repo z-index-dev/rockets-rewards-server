@@ -7,7 +7,8 @@ const port = process.env.PORT || 3000;
 
 // Schema variables
 const User = require('./models/User');
-const Request = require('./models/Request');
+const Request = require('./models/Submission');
+const Submission = require('./models/Submission');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -29,10 +30,10 @@ db.on('error', () => console.log('Error in connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
 app.post('/submit', (req, res) => {
-  const data = new Request(req.body);
-  console.log(req.body);
+  const submission = new Submission(req.body);
+  console.log(submission);
 
-  db.collection('requests').insertOne(data, (err, collection) => {
+  db.collection('requests').insertOne(submission, (err, collection) => {
     if(err) {
       throw err;
     }
