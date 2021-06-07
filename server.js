@@ -25,34 +25,20 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-app.post('/submit', async (req, res) => {
-  // const submission = new Submission(req.body);
-  // console.log(submission);
-
-  // db.collection('requests').insertOne(submission, (err, collection) => {
-  //   if(err) {
-  //     throw err;
-  //   }
-  //   console.log('Record inserted');
-  // });
-
-  // console.log(res.body);
-
-  const collection = db.collection('requests');
-  // Commenting out unless we end up needing it
-  res.setHeader('Content-Type', 'application/json');
-
+app.post('/submit', (req, res) => {
   const submission = new Submission(req.body);
-  collection.insertOne(submission)
-    .then(submission => {
-      res.status(200).json( { submission })
-      console.log(submission)
-    })
-    .catch(err => {
-      res.status(400).json({ "status": "failed" })
-    });
+  console.log(submission);
 
-  // return res.json({"status":"ok"});
+  db.collection('requests').insertOne(submission, (err, collection) => {
+    if(err) {
+      throw err;
+    }
+    console.log('Record inserted');
+  });
+
+  console.log(res.body);
+
+  return res.json({"status":"ok"});
 });
 
 app.get('/submit', (req, res) => {
