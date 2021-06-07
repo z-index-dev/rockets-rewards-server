@@ -27,9 +27,8 @@ db.once('open', () => console.log('Connected to db'));
 
 app.post('/submit', (req, res) => {
   const submission = new Submission(req.body);
-  console.log(submission);
 
-  db.collection('requests').insertOne(submission, (err, collection) => {
+  db.collection('requests').update(submission, {upsert: true}, (err, collection) => {
     if(err) {
       throw err;
     }
