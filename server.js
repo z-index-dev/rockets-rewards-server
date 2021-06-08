@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 // Schema variables
 const User = require('./models/User');
 const Submission = require('./models/Submission');
+const { request } = require('express');
 
 app.use(express.json());
 app.use(cors());
@@ -26,21 +27,38 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-app.post('/submit', (req, res) => {
-  const submission = new Submission(req.body);
-  const requests = db.collection('requests');
-
-  db.collection('requests').insertOne(submission, (err, collection) => {
-    if(err) {
-      throw err;
-    }
+app.post('/submit', async (req, res) => {
+  try {
+    const submission = new Submission(req.body);
+    const requests = db.collection('requests');
+    const query = { uuid: submission.uuid };
+    const update = { $set: { accountNumber, uuid, companyName, firstName, lastName, totalPoints, product_01, product_02, product_03, product_04, product_05, product_06, product_07, product_08, product_09, product_10, product_11, product_12, product_13, product_14, product_15, product_16 }};
+    const options = { upsert: true };
+  
+    requests.updateOne(query, update, options);
+    
     console.log('Record inserted');
-  });
+    return res.json({"status": "ok"});
+  } catch (err) {
+    console.log(err);
+  }
+}); 
 
-  console.log(res.body);
+// app.post('/submit', (req, res) => {
+//   const submission = new Submission(req.body);
+//   const requests = db.collection('requests');
 
-  return res.json({"status":"ok"});
-});
+//   db.collection('requests').insertOne(submission, (err, collection) => {
+//     if(err) {
+//       throw err;
+//     }
+//     console.log('Record inserted');
+//   });
+
+//   console.log(res.body);
+
+//   return res.json({"status":"ok"});
+// });
 
 app.get('/submit', (req, res) => {
   res.set({
