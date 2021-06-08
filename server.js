@@ -16,7 +16,8 @@ app.use(express.urlencoded({extended: true}));
 
 mongoose.connect('mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority', {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
 mongoose.Promise = global.Promise;
 
@@ -25,15 +26,39 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-app.post('/submit', (req, res) => {
+app.post('/submit', async (req, res) => {
   const submission = new Submission(req.body);
+  const requests = db.collection('requests');
 
-  db.collection('requests').update(submission, {upsert: true}, (err, collection) => {
-    if(err) {
-      throw err;
+  const query = submission.uuid;
+  const options = {
+    upsert: true
+  };
+  const replacement = submission;
+  const result = await requests.replaceOne(query, replacement, options);
+
+  if (result.modifiedCount === 0 && result.upsertedCount === 0) {
+    console.log("No changes made to the collection.");
+  } else {
+    if (result.matchedCount === 1) {
+      console.log("Matched " + result.matchedCount + " documents.");
     }
-    console.log('Record inserted');
-  });
+    if (result.modifiedCount === 1) {
+      console.log("Updated one document.");
+    }
+    if (result.upsertedCount === 1) {
+      console.log(
+        "Inserted one new document with an _id of " + result.upsertedId.uuid
+      );
+    }
+  }
+
+  // db.collection('requests').insertOne(submission, (err, collection) => {
+  //   if(err) {
+  //     throw err;
+  //   }
+  //   console.log('Record inserted');
+  // });
 
   console.log(res.body);
 
