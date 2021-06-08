@@ -33,7 +33,7 @@ app.post('/submit', async (req, res) => {
   try {
     const query = { uuid: submission.uuid };
     const options = { upsert: true };
-    const replacement = { submission };
+    const replacement = { accountNumber, uuid, companyName, firstName, lastName, totalPoints, product_01, product_02, product_03, product_04, product_04, product_05, product_06, product_07, product_08, product_09, product_10, product_11, product_12, product_13, product_14, product_15, product_16 };
   
     const result = await requests.replaceOne(query, replacement, options);
 
