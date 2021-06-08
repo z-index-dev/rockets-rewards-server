@@ -30,7 +30,7 @@ app.post('/submit', async (req, res) => {
   const submission = new Submission(req.body);
   const requests = db.collection('requests');
 
-  const query = submission.uuid;
+  const query = req.body.uuid;
   const options = {
     upsert: true
   };
