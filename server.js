@@ -31,7 +31,7 @@ app.post('/submit', async (req, res) => {
   const submission = new Submission(req.body);
   const requests = db.collection('requests');
   const items = db.collection('items');
-  const itemsArray;
+  let itemsArray;
 
   // This returns whole record as array
   items.find({}).toArray(function(err, result) {
