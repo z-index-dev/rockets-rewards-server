@@ -26,46 +26,20 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-app.post('/submit', async (req, res) => {
+app.post('/submit', (req, res) => {
   const submission = new Submission(req.body);
   const requests = db.collection('requests');
 
-  try {
-    const query = { uuid: submission.uuid };
-    const options = { upsert: true };
-    const replacement = { accountNumber, uuid, companyName, firstName, lastName, totalPoints, product_01, product_02, product_03, product_04, product_04, product_05, product_06, product_07, product_08, product_09, product_10, product_11, product_12, product_13, product_14, product_15, product_16 };
-  
-    const result = await requests.replaceOne(query, replacement, options);
-
-    if (result.modifiedCount === 0 && result.upsertedCount === 0) {
-      console.log("No changes made to the collection.");
-    } else {
-      if (result.matchedCount === 1) {
-        console.log("Matched " + result.matchedCount + " documents.");
-      }
-      if (result.modifiedCount === 1) {
-        console.log("Updated one document.");
-      }
-      if (result.upsertedCount === 1) {
-        console.log(
-          "Inserted one new document with an _id of " + result.upsertedId._id
-        );
-      }
+  db.collection('requests').insertOne(submission, (err, collection) => {
+    if(err) {
+      throw err;
     }
+    console.log('Record inserted');
+  });
 
-    console.log(res.body);
+  console.log(res.body);
 
-    return res.json({"status":"ok"});
-  } catch (err) {
-    console.log(err);
-  }
-
-  // requests.insertOne(submission, (err, collection) => {
-  //   if(err) {
-  //     throw err;
-  //   }
-  //   console.log('Record inserted');
-  // });
+  return res.json({"status":"ok"});
 });
 
 app.get('/submit', (req, res) => {
@@ -81,6 +55,7 @@ app.get('/submit', (req, res) => {
   return res.json({"status":"allowing access"});
 });
 
+// NB - Mongo will export file with the id
 app.get('/api/:id', async (req, res) => {
   const user = await User.findOne({ _id: req.params.id });
   res.send({ user });
