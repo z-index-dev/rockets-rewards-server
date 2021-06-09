@@ -100,7 +100,7 @@ app.post('/submit', async (req, res) => {
   ];
 
   let validUser = await User.findOne({ _id: req.body.uuid });
-  let validUserObject = JSON.parse(validUser);
+  let validUserObject = await JSON.parse(validUser);
   console.log(validUserObject);
 
   if (validUser) {
