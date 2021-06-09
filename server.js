@@ -30,6 +30,7 @@ db.once('open', () => console.log('Connected to db'));
 app.post('/submit', async (req, res) => {
   const submission = new Submission(req.body);
   const requests = db.collection('requests');
+  const users = db.collection('users');
   // const items = db.collection('items');
   const availableItems = [
     {
@@ -98,7 +99,8 @@ app.post('/submit', async (req, res) => {
     }
   ];
 
-  console.log(submission);
+  let validUser = await users.findOne( { _id: req.body.uuid });
+  console.log(validUser);
 
   // This returns whole record as array
   // items.find({}).toArray(function(err, result) {
