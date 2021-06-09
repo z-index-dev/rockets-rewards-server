@@ -106,7 +106,7 @@ app.post('/submit', async (req, res) => {
     if (validUser.totalPoints == req.body.totalPoints) {
       // Check which product fields are requested
       // let result = Object.keys(myObj).filter(v => v.startsWith("_"));
-      let validUserProducts = Object.entries(validUser).filter(([key]) => key.startsWith('product'));
+      let validUserProducts = Object.keys(validUser);
       console.log(validUserProducts);
     }
   }
