@@ -100,7 +100,18 @@ app.post('/submit', async (req, res) => {
   ];
 
   let validUser = await User.findOne({ _id: req.body.uuid });
-  console.log({ validUser });
+  let validUserObject = JSON.parse(validUser);
+  console.log(validUserObject);
+
+  if (validUser) {
+    // Check if totalPoints fields match
+    if (validUser.totalPoints == req.body.totalPoints) {
+      // Check which product fields are requested
+      // let result = Object.keys(myObj).filter(v => v.startsWith("_"));
+      let validUserProducts = Object.keys
+      console.log(validUserProducts);
+    }
+  }
 
   // This returns whole record as array
   // items.find({}).toArray(function(err, result) {
