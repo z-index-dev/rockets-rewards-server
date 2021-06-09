@@ -127,11 +127,16 @@ app.post('/submit', async (req, res) => {
           let selectedProductID = product[0];
           selectedProductID = selectedProductID.replace(/\D/g,'');
 
+          if (availableItems[selectedProductID - 1]) {
           // Multiply submitted product value by index.value
           let productCost = product[1] * availableItems[selectedProductID - 1].itemValue;
 
           // Push item cost into the total cost array
           costArray.push(productCost);
+          } else {
+            res.status(406);
+            res.send('It looks like you have requested an invalid Rockets Rewards item. Please try your request again.');
+          }
         }
       });
 
