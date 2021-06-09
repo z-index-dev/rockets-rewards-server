@@ -33,11 +33,72 @@ app.post('/submit', async (req, res) => {
   // const items = db.collection('items');
   const availableItems = [
     {
-      "itemID": "product_01",
+      "productID": "product_01",
       "itemValue": 500
+    },
+    {
+      "productID": "product_02",
+      "itemValue": 4000
+    },
+    {
+      "productID": "product_03",
+      "itemValue": 5000
+    },
+    {
+      "productID": "product_04",
+      "itemValue": 6000
+    },
+    {
+      "productID": "product_05",
+      "itemValue": 7000
+    },
+    {
+      "productID": "product_06",
+      "itemValue": 8000
+    },
+    {
+      "productID": "product_07",
+      "itemValue": 9000
+    },
+    {
+      "productID": "product_08",
+      "itemValue": 9000
+    },
+    {
+      "productID": "product_09",
+      "itemValue": 10000
+    },
+    {
+      "productID": "product_10",
+      "itemValue": 10000
+    },
+    {
+      "productID": "product_11",
+      "itemValue": 10000
+    },
+    {
+      "productID": "product_12",
+      "itemValue": 11000
+    },
+    {
+      "productID": "product_13",
+      "itemValue": 11000
+    },
+    {
+      "productID": "product_14",
+      "itemValue": 12000
+    },
+    {
+      "productID": "product_15",
+      "itemValue": 12000
+    },
+    {
+      "productID": "product_16",
+      "itemValue": 12000
     }
   ];
-  console.log(availableItems);
+
+  console.log(submission);
 
   // This returns whole record as array
   // items.find({}).toArray(function(err, result) {
