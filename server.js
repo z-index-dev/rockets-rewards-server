@@ -99,8 +99,8 @@ app.post('/submit', async (req, res) => {
     }
   ];
 
-  let validUser = await users.findOne( { _id: req.body.uuid });
-  console.log(validUser);
+  let validUser = await users.findOne({ _id: req.body.uuid });
+  console.log({ validUser });
 
   // This returns whole record as array
   // items.find({}).toArray(function(err, result) {
