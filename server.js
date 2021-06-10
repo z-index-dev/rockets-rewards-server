@@ -32,7 +32,7 @@ app.post('/submit', async (req, res) => {
   const requests = db.collection('requests');
   const users = db.collection('users');
   // const items = db.collection('items');
-  const costArray = [];
+  let costArray = [];
   let totalCost = 0;
   const availableItems = [
     {
@@ -101,6 +101,7 @@ app.post('/submit', async (req, res) => {
     }
   ];
 
+  // 
   let validUser = await User.findOne({ _id: req.body.uuid });
 
   if (validUser) {
@@ -120,7 +121,7 @@ app.post('/submit', async (req, res) => {
       let requestedProductsArray = Object.keys(submittedProducts)
         .map(key => [(key), submittedProducts[key]]);
       
-      // Do the work on products that have been requests
+      // Do the work on products that have been requested
       requestedProductsArray.forEach(product => {
         if (product[1] > 0) {
           // Create index to be matched to availableItems, remove 'product_'
@@ -128,20 +129,25 @@ app.post('/submit', async (req, res) => {
           selectedProductID = selectedProductID.replace(/\D/g,'');
 
           if (availableItems[selectedProductID - 1]) {
-          // Multiply submitted product value by index.value
-          let productCost = product[1] * availableItems[selectedProductID - 1].itemValue;
+            // Multiply submitted product value by index.value
+            let productCost = product[1] * availableItems[selectedProductID - 1].itemValue;
 
-          // Push item cost into the total cost array
-          costArray.push(productCost);
-          } else {
-            res.status(406);
-            res.send('It looks like you have requested an invalid Rockets Rewards item. Please try your request again.');
+            // Push item cost into the total cost array
+            costArray.push(productCost);
           }
         }
       });
 
       // Once the item values have been created, add them up
-      totalCost = costArray.reduce((a, b) => a + b);
+      if(costArray) {
+        try {
+          totalCost = costArray.reduce((a, b) => a + b);
+        } catch(err) {
+          res.status(406);
+          res.json({"error": "You have requested an invalid Rockets Rewards item. Please try again."});
+          return;
+        }
+      }
 
       // If balance is greater than zero after item validation, write to the database
       if (req.body.totalPoints >= totalCost) {
@@ -156,18 +162,19 @@ app.post('/submit', async (req, res) => {
           return res.json({"status": "ok"});
         } catch (err) {
           console.log(err);
+          res.send(err);
         }
       } else {
         res.status(406);
-        res.send('Your Rockets Rewards request balance exceeds your available balance. Please try again or contact your Rockets representative.');
+        res.json({"error": "Your Rockets Rewards request balance exceeds your available balance. Please try again or contact your Rockets representative."});
       }
     } else {
       res.status(401);
-      res.send('The Rockets Rewards balance in your request does not match our records. Please try again or contact your Rockets representative.');
+      res.json({"error": "The Rockets Rewards balance in your request does not match our records. Please try again or contact your Rockets representative."});
     }
   } else {
     res.status(404);
-    res.send('User ID not found. If you believe you have received this message in error, please contact your Rockets Rewards representative.');
+    res.json({"error": "User ID not found. If you believe you have received this message in error, please contact your Rockets Rewards representative."});
   }
 }); 
 
