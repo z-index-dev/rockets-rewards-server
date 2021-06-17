@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 // Create user schema and model
 const userSchema = new Schema({
-  company: {
+  companyName: {
     type: String
   },
   firstName: {
@@ -12,23 +12,17 @@ const userSchema = new Schema({
   lastName: {
     type: String
   },
-  address: {
+  companyFirstName: {
     type: String
   },
-  city: {
-    type: String
-  }, 
-  state: {
-    type: String
-  },
-  zip: {
+  companyLastName: {
     type: String
   },
   accountNumber: {
     type: String
   },
   priorityNumber: {
-    type: Number
+    type: String
   },
   tenure: {
     type: Number
@@ -48,16 +42,10 @@ const userSchema = new Schema({
   totalPoints: {
     type: Number
   },
-  rep: {
+  csr: {
     type: String
   },
   planType: {
-    type: String
-  },
-  phone: {
-    type: Number
-  },
-  email: {
     type: String
   }
 });

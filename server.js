@@ -1,9 +1,11 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const json2csv = require('json2csv').parse;
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 3000;
+const fs = require('file-system');
+const path = require('path');
 
 // Schema variables
 const User = require('./models/User');
@@ -41,63 +43,63 @@ app.post('/submit', async (req, res) => {
     },
     {
       "productID": "product_02",
-      "itemValue": 4000
-    },
-    {
-      "productID": "product_03",
       "itemValue": 5000
     },
     {
-      "productID": "product_04",
+      "productID": "product_03",
       "itemValue": 6000
     },
     {
-      "productID": "product_05",
+      "productID": "product_04",
       "itemValue": 7000
     },
     {
-      "productID": "product_06",
+      "productID": "product_05",
       "itemValue": 8000
     },
     {
+      "productID": "product_06",
+      "itemValue": 1000
+    },
+    {
       "productID": "product_07",
-      "itemValue": 9000
+      "itemValue": 10000
     },
     {
       "productID": "product_08",
-      "itemValue": 9000
+      "itemValue": 11000
     },
     {
       "productID": "product_09",
-      "itemValue": 10000
+      "itemValue": 120000
     },
     {
       "productID": "product_10",
-      "itemValue": 10000
+      "itemValue": 12000
     },
     {
       "productID": "product_11",
-      "itemValue": 10000
+      "itemValue": 13000
     },
     {
       "productID": "product_12",
-      "itemValue": 11000
+      "itemValue": 14000
     },
     {
       "productID": "product_13",
-      "itemValue": 11000
+      "itemValue": 15000
     },
     {
       "productID": "product_14",
-      "itemValue": 12000
+      "itemValue": 16000
     },
     {
       "productID": "product_15",
-      "itemValue": 12000
+      "itemValue": 17000
     },
     {
       "productID": "product_16",
-      "itemValue": 12000
+      "itemValue": 0
     }
   ];
 
@@ -105,6 +107,9 @@ app.post('/submit', async (req, res) => {
   let validUser = await User.findOne({ _id: req.body.uuid });
 
   if (validUser) {
+    // Set value for donate product (last item)
+    availableItems[availableItems.length - 1].itemValue = validUser.totalPoints;
+    console.log(availableItems[15]);
 
     // Check if totalPoints fields match
     if (validUser.totalPoints == req.body.totalPoints) {
@@ -117,7 +122,7 @@ app.post('/submit', async (req, res) => {
           return newData;
         }, {});
 
-      // Convert object to array value pairs
+      // Convert object to array of [key, value] pairs
       let requestedProductsArray = Object.keys(submittedProducts)
         .map(key => [(key), submittedProducts[key]]);
       
@@ -150,7 +155,7 @@ app.post('/submit', async (req, res) => {
       }
 
       // If balance is greater than zero after item validation, write to the database
-      if (req.body.totalPoints >= totalCost) {
+      if (validUser.totalPoints >= totalCost) {
         try {
           const query = { uuid: submission.uuid };
           const update = { $set: { accountNumber: submission.accountNumber, uuid: submission.uuid, companyName: submission.companyName , firstName: submission.firstName , lastName: submission.lastName , totalPoints: submission.totalPoints , product_01: submission.product_01 , product_02: submission.product_02 , product_03: submission.product_03 , product_04: submission.product_04 , product_05: submission.product_05 , product_06: submission.product_06 , product_07: submission.product_07 , product_08: submission.product_08 , product_09: submission.product_09 , product_10: submission.product_10 , product_11: submission.product_11 , product_12: submission.product_12 , product_13: submission.product_13 , product_14: submission.product_14 , product_15: submission.product_15 , product_16: submission.product_16 }};
@@ -195,6 +200,32 @@ app.get('/submit', (req, res) => {
 app.get('/api/:id', async (req, res) => {
   const user = await User.findOne({ _id: req.params.id });
   res.send({ user });
+});
+
+app.get('/export', async (req, res) => {
+  const requests = await db.collection('requests').find({}).toArray();
+  const dateTime = new Date().toISOString().slice(-24).replace(/\D/g,'').slice(0, 14);
+  const fileName = `${dateTime}-rewards-requests.csv`;
+  const filePath = path.join(__dirname, "Downloads", fileName);
+  console.log(filePath);
+
+  let csv;
+
+  const fields = ['accountNumber', 'uuid', 'companyName', 'firstName', 'lastName', 'totalPoints', 'product_01', 'product_02', 'product_03', 'product_04', 'product_05', 'product_06', 'product_07', 'product_08', 'product_09', 'product_10', 'product_11', 'product_12', 'product_13', 'product_14', 'product_15', 'product_16'];
+  
+  try {
+    csv = json2csv(requests, {fields});
+  } catch(err) {
+    return res.status(500).json({err});
+  };
+
+  fs.writeFile(filePath, csv, function(err) {
+    if(err) {
+      return res.json(err).status(500);
+    } else {
+      res.download(filePath);
+    };
+  });
 });
 
 app.listen(port);
