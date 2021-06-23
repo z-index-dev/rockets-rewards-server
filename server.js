@@ -62,7 +62,7 @@ app.post('/submit', async (req, res) => {
     },
     {
       "productID": "product_06",
-      "itemValue": 1000
+      "itemValue": 10000
     },
     {
       "productID": "product_07",
@@ -74,7 +74,7 @@ app.post('/submit', async (req, res) => {
     },
     {
       "productID": "product_09",
-      "itemValue": 120000
+      "itemValue": 12000
     },
     {
       "productID": "product_10",
@@ -121,30 +121,29 @@ app.post('/submit', async (req, res) => {
         .filter(key => key.indexOf('product') == 0)
         .reduce((newData, key) => {
           newData[key] = req.body[key];
-          console.log(newData);
+          // console.log(newData);
           return newData;
         }, {});
 
       // Convert object to array of [key, value] pairs
       let requestedProductsArray = Object.keys(submittedProducts)
         .map(key => [(key), submittedProducts[key]]);
+      console.log(requestedProductsArray);
       
       // Do the work on products that have been requested
       requestedProductsArray.forEach(product => {
-        console.log(product);
+        // console.log(product);
         if (product[1] > 0) {
-          // Create index to be matched to availableItems, remove 'product_'
+          console.log(product[1]);
+          // Create index to be matched to availableItems
           let selectedProductID = product[0];
-          selectedProductID = selectedProductID.replace(/\D/g,'');
-          console.log(selectedProductID);
 
-          if (availableItems[selectedProductID - 1]) {
-            // Multiply submitted product value by index.value
-            let productCost = product[1] * availableItems[selectedProductID - 1].itemValue;
-
-            // Push item cost into the total cost array
-            costArray.push(productCost);
-          }
+          availableItems.forEach(item => {
+            if(item.productID == selectedProductID) {
+              let productCost = item.itemValue * product[1];
+              costArray.push(productCost);
+            };
+          });
         }
       });
 
@@ -152,7 +151,7 @@ app.post('/submit', async (req, res) => {
       if(costArray) {
         try {
           totalCost = costArray.reduce((a, b) => a + b);
-          console.log(totalCost);
+          // console.log(totalCost);
         } catch(err) {
           res.status(406);
           res.json({"error": "You have requested an invalid Rockets Rewards item. Please refresh this page and try again."});
