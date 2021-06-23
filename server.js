@@ -114,7 +114,7 @@ app.post('/submit', async (req, res) => {
     availableItems[availableItems.length - 1].itemValue = validUser.totalPoints;
 
     // Check if totalPoints fields match
-    if (validUser.totalPoints === req.body.totalPoints) {
+    if (validUser.totalPoints == req.body.totalPoints) {
 
       // Create object with just the products from req.body
       let submittedProducts = Object.keys(req.body)
@@ -155,7 +155,7 @@ app.post('/submit', async (req, res) => {
           console.log(totalCost);
         } catch(err) {
           res.status(406);
-          res.json({"error": "You have requested an invalid Rockets Rewards item. Please try again."});
+          res.json({"error": "You have requested an invalid Rockets Rewards item. Please refresh this page and try again."});
           return;
         }
       }
@@ -177,11 +177,11 @@ app.post('/submit', async (req, res) => {
         }
       } else {
         res.status(406);
-        res.json({"error": "Your Rockets Rewards request balance exceeds your available balance. Please try again or contact your Rockets representative."});
+        res.json({"error": "Your Rockets Rewards request balance exceeds your available balance. Please refresh this page and try again, or contact your Rockets representative."});
       }
     } else {
       res.status(401);
-      res.json({"error": "The Rockets Rewards balance in your request does not match our records. Please try again or contact your Rockets representative."});
+      res.json({"error": "The Rockets Rewards balance in your request does not match our records. Please refresh this page and try again, or contact your Rockets representative."});
     }
   } else {
     res.status(404);
