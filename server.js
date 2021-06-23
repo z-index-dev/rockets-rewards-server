@@ -112,16 +112,16 @@ app.post('/submit', async (req, res) => {
   if (validUser) {
     // Set value for donate product (last item)
     availableItems[availableItems.length - 1].itemValue = validUser.totalPoints;
-    console.log(availableItems[15]);
 
     // Check if totalPoints fields match
-    if (validUser.totalPoints == req.body.totalPoints) {
+    if (validUser.totalPoints === req.body.totalPoints) {
 
       // Create object with just the products from req.body
       let submittedProducts = Object.keys(req.body)
         .filter(key => key.indexOf('product') == 0)
         .reduce((newData, key) => {
           newData[key] = req.body[key];
+          console.log(newData);
           return newData;
         }, {});
 
@@ -131,10 +131,12 @@ app.post('/submit', async (req, res) => {
       
       // Do the work on products that have been requested
       requestedProductsArray.forEach(product => {
+        console.log(product);
         if (product[1] > 0) {
           // Create index to be matched to availableItems, remove 'product_'
           let selectedProductID = product[0];
           selectedProductID = selectedProductID.replace(/\D/g,'');
+          console.log(selectedProductID);
 
           if (availableItems[selectedProductID - 1]) {
             // Multiply submitted product value by index.value
@@ -150,6 +152,7 @@ app.post('/submit', async (req, res) => {
       if(costArray) {
         try {
           totalCost = costArray.reduce((a, b) => a + b);
+          console.log(totalCost);
         } catch(err) {
           res.status(406);
           res.json({"error": "You have requested an invalid Rockets Rewards item. Please try again."});
