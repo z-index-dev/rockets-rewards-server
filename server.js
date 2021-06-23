@@ -4,8 +4,11 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 3000;
+const wakeUpApp = require('./wakeUp');
+const dynoURL = 'https://rockets-rewards-server.herokuapp.com/submit';
 const fs = require('file-system');
 const path = require('path');
+const mongoURI = process.env.CONNECTIONURI || 'mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority';
 
 // Schema variables
 const User = require('./models/User');
@@ -17,7 +20,7 @@ app.use(cors());
 
 app.use(express.urlencoded({extended: true}));
 
-mongoose.connect('mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority', {
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
@@ -228,4 +231,6 @@ app.get('/export', async (req, res) => {
   });
 });
 
-app.listen(port);
+app.listen(port, () => {
+  wakeUpApp(dynoURL);
+});
