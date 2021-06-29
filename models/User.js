@@ -50,6 +50,7 @@ const userSchema = new Schema({
   }
 });
 
+// ! - Add ability to create links here
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
