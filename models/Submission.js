@@ -71,6 +71,9 @@ const submissionSchema = new Schema({
   },
   product_16: {
     type: Number
+  },
+  product_17: {
+    type: Number
   }
 });
 
