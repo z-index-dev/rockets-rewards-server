@@ -63,7 +63,7 @@ const validateSubmission = async(req, res) => {
     },
     {
       "productID": "product_06",
-      "itemValue": 1000
+      "itemValue": 10000
     },
     {
       "productID": "product_07",
