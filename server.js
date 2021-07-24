@@ -8,7 +8,7 @@ const wakeUpApp = require('./wakeUp');
 const dynoURL = 'https://rockets-rewards-server.herokuapp.com/submit';
 const fs = require('file-system');
 const path = require('path');
-const mongoURI = 'mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority';
+const mongoURI = process.env.CONNECTIONURI || 'mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority';
 
 // Schema variables
 const User = require('./models/User');
@@ -32,10 +32,10 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-// * Validate Submit Function
+// Validate Submit Function
 const validateSubmission = async(req, res) => {
   const submission = new Submission(req.body);
-  const requests = db.collection('requests-test');
+  const requests = db.collection('requests');
   const users = db.collection('users');
   // const items = db.collection('items');
   let costArray = [];
@@ -63,7 +63,7 @@ const validateSubmission = async(req, res) => {
     },
     {
       "productID": "product_06",
-      "itemValue": 10000
+      "itemValue": 1000
     },
     {
       "productID": "product_07",
@@ -102,12 +102,12 @@ const validateSubmission = async(req, res) => {
       "itemValue": 17000
     },
     {
-      "productID": "product_17",
-      "itemValue": 5000
-    },
-    {
       "productID": "product_16",
       "itemValue": 0
+    },
+    {
+      "productID": "product_17",
+      "itemValue": 5000
     }
   ];
 
@@ -115,7 +115,8 @@ const validateSubmission = async(req, res) => {
 
   if (validUser) {
     // Set value for donate product (last item)
-    availableItems[availableItems.length - 1].itemValue = validUser.totalPoints;
+    availableItems[availableItems.length - 2].itemValue = validUser.totalPoints;
+    // console.log(availableItems[16]);
 
     // Check if totalPoints fields match
     if (validUser.totalPoints == req.body.totalPoints) {
@@ -125,28 +126,25 @@ const validateSubmission = async(req, res) => {
         .filter(key => key.indexOf('product') == 0)
         .reduce((newData, key) => {
           newData[key] = req.body[key];
-          // console.log(newData);
           return newData;
         }, {});
 
       // Convert object to array of [key, value] pairs
       let requestedProductsArray = Object.keys(submittedProducts)
         .map(key => [(key), submittedProducts[key]]);
-      console.log(requestedProductsArray);
+        // console.log(requestedProductsArray);
       
       // Do the work on products that have been requested
       requestedProductsArray.forEach(product => {
-        // console.log(product);
         if (product[1] > 0) {
-          console.log(product[1]);
-          // Create index to be matched to availableItems
+          // Create index to be matched to availableItems, remove 'product_'
           let selectedProductID = product[0];
 
           availableItems.forEach(item => {
-            if(item.productID == selectedProductID) {
+            if (item.productID === selectedProductID) {
               let productCost = item.itemValue * product[1];
               costArray.push(productCost);
-            };
+            }
           });
         }
       });
@@ -155,10 +153,9 @@ const validateSubmission = async(req, res) => {
       if(costArray) {
         try {
           totalCost = costArray.reduce((a, b) => a + b);
-          // console.log(totalCost);
         } catch(err) {
           res.status(406);
-          res.json({"error": "You have requested an invalid Rockets Rewards item. Please refresh this page and try again."});
+          res.json({"error": "You have requested an invalid Rockets Rewards item. Please try again."});
           return;
         }
       }
@@ -167,7 +164,7 @@ const validateSubmission = async(req, res) => {
       if (validUser.totalPoints >= totalCost) {
         try {
           const query = { uuid: submission.uuid };
-          const update = { $set: { accountNumber: submission.accountNumber, uuid: submission.uuid, companyName: submission.companyName, firstName: submission.firstName, lastName: submission.lastName, totalPoints: submission.totalPoints, product_01: submission.product_01, product_02: submission.product_02, product_03: submission.product_03, product_04: submission.product_04, product_05: submission.product_05 , product_06: submission.product_06, product_07: submission.product_07, product_08: submission.product_08, product_09: submission.product_09, product_10: submission.product_10, product_11: submission.product_11, product_12: submission.product_12, product_13: submission.product_13, product_14: submission.product_14, product_15: submission.product_15, product_16: submission.product_16, product_17: submission.product_17 }};
+          const update = { $set: { accountNumber: submission.accountNumber, uuid: submission.uuid, companyName: submission.companyName , firstName: submission.firstName , lastName: submission.lastName , totalPoints: submission.totalPoints , product_01: submission.product_01 , product_02: submission.product_02 , product_03: submission.product_03 , product_04: submission.product_04 , product_05: submission.product_05 , product_06: submission.product_06 , product_07: submission.product_07 , product_08: submission.product_08 , product_09: submission.product_09 , product_10: submission.product_10 , product_11: submission.product_11 , product_12: submission.product_12 , product_13: submission.product_13 , product_14: submission.product_14 , product_15: submission.product_15 , product_16: submission.product_16 , product_17: submission.product_17 }};
           const options = { upsert: true };
         
           requests.updateOne(query, update, options);
@@ -180,21 +177,22 @@ const validateSubmission = async(req, res) => {
         }
       } else {
         res.status(406);
-        res.json({"error": "Your Rockets Rewards request balance exceeds your available balance. Please refresh this page and try again, or contact your Rockets representative."});
+        res.json({"error": "Your Rockets Rewards request balance exceeds your available balance. Please try again or contact your Rockets representative."});
       }
     } else {
       res.status(401);
-      res.json({"error": "The Rockets Rewards balance in your request does not match our records. Please refresh this page and try again, or contact your Rockets representative."});
+      res.json({"error": "The Rockets Rewards balance in your request does not match our records. Please try again or contact your Rockets representative."});
     }
   } else {
     res.status(404);
     res.json({"error": "User ID not found. If you believe you have received this message in error, please contact your Rockets Rewards representative."});
   }
-}
+};
 
 // Submission Routes
 app.post('/submit-test', validateSubmission);
-app.post('/submit', validateSubmission); 
+app.post('/submit', validateSubmission);
+
 
 app.get('/submit', (req, res) => {
   res.set({
