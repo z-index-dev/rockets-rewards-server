@@ -3,12 +3,12 @@ const json2csv = require('json2csv').parse;
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 const wakeUpApp = require('./wakeUp');
 const dynoURL = 'https://rockets-rewards-server.herokuapp.com/submit';
 const fs = require('file-system');
 const path = require('path');
-const mongoURI = process.env.CONNECTIONURI || 'mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority';
+const mongoURI = 'mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority';
 
 // Schema variables
 const User = require('./models/User');
@@ -151,8 +151,6 @@ const validateSubmission = async(req, res) => {
         }
       });
 
-      // {uuid: "60d39d2e7769b9c3b3932b19"}
-
       // Once the item values have been created, add them up
       if(costArray) {
         try {
@@ -194,6 +192,7 @@ const validateSubmission = async(req, res) => {
   }
 }
 
+// Submission Routes
 app.post('/submit-test', validateSubmission);
 app.post('/submit', validateSubmission); 
 
