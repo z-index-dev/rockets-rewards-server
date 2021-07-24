@@ -32,9 +32,10 @@ const db = mongoose.connection;
 db.on('error', () => console.log('Error connecting to db'));
 db.once('open', () => console.log('Connected to db'));
 
-app.post('/submit', async (req, res) => {
+// * Validate Submit Function
+const validateSubmission = async(req, res) => {
   const submission = new Submission(req.body);
-  const requests = db.collection('requests');
+  const requests = db.collection('requests-test');
   const users = db.collection('users');
   // const items = db.collection('items');
   let costArray = [];
@@ -110,7 +111,6 @@ app.post('/submit', async (req, res) => {
     }
   ];
 
-  // 
   let validUser = await User.findOne({ _id: req.body.uuid });
 
   if (validUser) {
@@ -192,7 +192,10 @@ app.post('/submit', async (req, res) => {
     res.status(404);
     res.json({"error": "User ID not found. If you believe you have received this message in error, please contact your Rockets Rewards representative."});
   }
-}); 
+}
+
+app.post('/submit-test', validateSubmission);
+app.post('/submit', validateSubmission); 
 
 app.get('/submit', (req, res) => {
   res.set({
