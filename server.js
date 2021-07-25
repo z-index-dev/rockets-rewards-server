@@ -1,3 +1,4 @@
+require('dotenv').config({ path: 'process.env' });
 const express = require('express');
 const json2csv = require('json2csv').parse;
 const cors = require('cors');
@@ -8,7 +9,7 @@ const wakeUpApp = require('./wakeUp');
 const dynoURL = 'https://rockets-rewards-server.herokuapp.com/submit';
 const fs = require('file-system');
 const path = require('path');
-const mongoURI = process.env.CONNECTIONURI || 'mongodb+srv://zachshelton:rewards@cluster0.evwdm.mongodb.net/rockets-rewards?retryWrites=true&w=majority';
+const mongoURI = process.env.CONNECTIONURI;
 
 // Schema variables
 const User = require('./models/User');
@@ -188,6 +189,20 @@ const validateSubmission = async(req, res) => {
     res.json({"error": "User ID not found. If you believe you have received this message in error, please contact your Rockets Rewards representative."});
   }
 };
+
+
+app.get('/', (req, res) => {
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true,
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json'
+  });
+
+  console.log('Ready to process...');
+
+  return res.json({"status":"allowing access"});
+});
 
 // Submission Routes
 app.post('/submit-test', validateSubmission);
